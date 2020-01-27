@@ -1,8 +1,8 @@
 import socket
 import mylogger
 
-#IPADDRESS = 'dbelab04'
-IPADDRESS = 'localhost'
+IPADDRESS = 'dbelab04'
+#IPADDRESS = 'localhost'
 PORT = 1234
 
 #logging setup
