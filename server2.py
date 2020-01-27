@@ -3,6 +3,7 @@ import mylogger
 import platform
 import sys
 
+
 def getinfo():
     z = platform.processor() + '. ' + platform.platform()
     return z
