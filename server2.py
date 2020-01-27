@@ -10,9 +10,8 @@ def getinfo():
 #logging setup
 logger = mylogger.init_logging(name='server1', loglevel=mylogger.DEBUG)
 
-
-try:
-    while True:
+while True:
+    try:
         s = socket.socket()  # create socket object
         logger.debug('Socket created.')
         PORT = 1234
@@ -29,10 +28,10 @@ try:
         c.close()  # Connection closed
         logger.debug('Connection closed.')
 
-except KeyboardInterrupt:
-    sys.exit()
-    pass # do cleanup heres
+    except KeyboardInterrupt:
+        sys.exit()
+        pass # do cleanup heres
 
-finally:
-    s.close()
-    logger.debug('Socket closed.')
+    finally:
+        s.close()
+        logger.debug('***Socket closed.***')
