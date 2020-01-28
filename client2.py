@@ -17,7 +17,9 @@ while True:
         s = socket.socket()  # create socket object
         logger.debug('Socket created.')
         s.connect((IPADDRESS, PORT))  # connect to server
-        line = s.recv(1024)  # receive msg
+        line = s.recv(1024)  # receive msg 1024 size
         print 'Received msg:', line  # print receive msg
         s.close()  # close socket connection
         logger.debug('Socket closed.')
+        if s is not None:
+            del s

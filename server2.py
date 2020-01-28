@@ -2,6 +2,7 @@ import socket
 import mylogger
 import platform
 import sys
+import time
 
 
 def getinfo():
@@ -18,7 +19,7 @@ while True:
         PORT = 1234
         s.bind(('0.0.0.0', PORT))  # Binding to '0.0.0.0' or '' allows connections from any IP address that can route to it.
         logger.debug('Socket binded to port %s.', PORT)
-        s.listen(5)
+        s.listen(5) # queue of 5
         logger.debug('Socket is listening.')
         c, address = s.accept()
         logger.debug('Connection accepted from %s.', address)
