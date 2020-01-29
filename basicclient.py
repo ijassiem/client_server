@@ -12,7 +12,9 @@ logger = mylogger.init_logging(name='basic_client', loglevel=mylogger.DEBUG)
 
 s = socket.socket(IPV4, TCP)  # create socket object
 
+
 try:
+   # ans = 1/0
     s.connect((IPADDRESS, PORT))  # attempt connection to server
     logger.debug('Connected to server.')
     while True:
@@ -24,6 +26,12 @@ try:
 except socket.error as e:
     print "Socket Error: %s" % e
     logger.debug("Socket Error: %s" % e)
+except KeyboardInterrupt as e:
+    print("KeyboardInterrupt has been caught.")
+    logger.debug("Keyboard Error: %s" % e)
+except Exception as e:
+    print "Generic error: %s" %e
+    logger.debug("Generic Error: %s" % e)
 finally:
     s.close()
     logger.debug('Socket closed.')
