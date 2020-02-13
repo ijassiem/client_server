@@ -786,14 +786,45 @@ if __name__ == '__main__':
                 _null = raw_input("Press any key to continue...")
         logger.info('Done mapping switches.')
 
-        matrix = get_rates(switch_dict, new_ssh_list)
+
+        # creates list from list of objects in new_ssh_list - IJ
+        ssh_list_values = []
+        for ssh_obj in new_ssh_list:
+            ssh_list_values.append(ssh_obj.hostname)
+        print 'ssh_list_values: ', ssh_list_values
+
+        # converts 3-level default dictionary into standard python 3-level dictionary - IJ
+        switch_dict_undefault = dict(switch_dict)  # level1
+        for k, v in switch_dict_undefault.items():
+            for k2, v2 in v.items():
+                switch_dict_undefault[k][k2] = dict(v2)  # level3
+            switch_dict_undefault[k] = dict(v)  # level 2
+        print 'switch_dict_undefault: ', switch_dict_undefault
 
         #############################################################
+        # construct message with header + id + data - IJ
+        #############################################################
+
+        # HEADERSIZE = 10
+        # msg = pickle.dumps(matrix) # pickles matrix info from switch
+        # print msg
+        # #msg = '{0: <10}'.format(len(msg)) + msg # combine header and message
+        # msg = str(len(msg)).ljust(HEADERSIZE) + msg # alternative to above line
+        # print msg
 
         HEADERSIZE = 10
-        msg = pickle.dumps(matrix) # pickles matrix info from switch
-        #msg = '{0: <10}'.format(len(msg)) + msg # combine header and message
-        msg = str(len(msg)).ljust(HEADERSIZE) + msg # alternative to above line
+        IDSIZE = 5
+        msg = pickle.dumps(ssh_list_values)  # pickles ssh_list_values
+        ##print msg
+        msg = 'ID01'.ljust(IDSIZE) + msg # alternative code msg = '{0: <10}'.format(len(msg)) + msg # combine header and message
+        msg = str(len(msg)).ljust(HEADERSIZE) + msg  # header and id added to data
+        #print msg
+
+        msg2 = pickle.dumps(switch_dict_undefault) # pickles switch_dict_undefault
+        ##print msg2
+        msg2 = 'ID02'.ljust(IDSIZE) + msg2  #
+        msg2 = str(len(msg2)).ljust(HEADERSIZE) + msg2  # header and id added to data
+        #print msg2
 
         ##############################################################
 
@@ -812,8 +843,11 @@ if __name__ == '__main__':
             # clientsocket.send(bytes(msg, "utf-8"))  # send message
             while True:
                 clientsocket.send(msg)  # send message
-                logger.debug('Message sent to client.')
-                time.sleep(5)  # 5 sec delay
+                logger.debug('Message1 sent to client.')
+                time.sleep(0.1)  # 5 sec delay
+                clientsocket.send(msg2)  # send message
+                logger.debug('Message2 sent to client.')
+                time.sleep(3)  # 5 sec delay
         except socket.error as e:
             print "Socket Error: %s" % e
             logger.debug("Socket Error: %s" % e)
